@@ -67,10 +67,6 @@ async def todo(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def get_latest_build(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if is_group_chat(update):
-        # await context.bot.sendMessage(
-        #     chat_id = update.effective_chat.id,
-        #
-        # )
         apk_name = get_latest_apk()
         await context.bot.sendDocument(
             chat_id=update.effective_chat.id, document=apk_name
