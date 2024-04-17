@@ -3,6 +3,7 @@ from telegram.ext import Application, CommandHandler, ContextTypes
 from wekan_handler import create_new_card, backlog_list, todo_list
 import os
 import logging
+from gitlab import get_latest_apk
 
 TELEGRAM_API_KEY = os.environ["TELEGRAM_API_KEY"]
 TELEGRAM_GROUP_CHAT_ID = int(os.environ["TELEGRAM_GROUP_CHAT_ID"])
@@ -64,10 +65,23 @@ async def todo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 
+async def get_latest_build(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if is_group_chat(update):
+        # await context.bot.sendMessage(
+        #     chat_id = update.effective_chat.id,
+        #
+        # )
+        apk_name = get_latest_apk()
+        await context.bot.sendDocument(
+            chat_id=update.effective_chat.id, document=apk_name
+        )
+
+
 def main():
     application = Application.builder().token(TELEGRAM_API_KEY).build()
     application.add_handler(CommandHandler("backlog", callback=backlog))
     application.add_handler(CommandHandler("todo", callback=todo))
+    application.add_handler(CommandHandler("getlatestbuild", callback=get_latest_build))
     application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 
