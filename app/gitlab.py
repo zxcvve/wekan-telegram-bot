@@ -9,12 +9,19 @@ PROJECT_ID = 8
 HEADERS = {"PRIVATE-TOKEN": GITLAB_PRIVATE_TOKEN}
 
 
+def find_build_job_id(res_json):
+    for x in res_json:
+        if x["stage"] == "build":
+            return x["id"]
+
+
 def get_latest_successful_job():
     res = requests.get(
         f"{GIT_URL}/api/v4/projects/{PROJECT_ID}/jobs?scope[]=success", headers=HEADERS
     )
-    latest_successful_job_id = res.json()[0]["id"]
-    return latest_successful_job_id
+    res_json = res.json()
+    latest_successful_build_job_id = find_build_job_id(res_json)
+    return latest_successful_build_job_id
 
 
 def download_artifacts_zip(job_id):
