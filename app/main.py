@@ -8,6 +8,8 @@ from gitlab import get_latest_apk
 TELEGRAM_API_KEY = os.environ["TELEGRAM_API_KEY"]
 TELEGRAM_GROUP_CHAT_ID = int(os.environ["TELEGRAM_GROUP_CHAT_ID"])
 
+BUSY = False
+
 # Enable logging
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
@@ -66,12 +68,15 @@ async def todo(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def get_latest_build(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if is_group_chat(update):
+    global BUSY
+    if is_group_chat(update) and not BUSY:
+        BUSY = True
         apk_name = get_latest_apk()
         await context.bot.sendDocument(
             chat_id=update.effective_chat.id, document=apk_name
         )
         os.remove(apk_name)
+        BUSY = False
 
 
 def main():
