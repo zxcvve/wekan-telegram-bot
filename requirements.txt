@@ -1,0 +1,5 @@
+python-telegram-bot
+python-wekan
+requests
+os
+zipfile
