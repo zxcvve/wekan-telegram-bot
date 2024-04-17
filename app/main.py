@@ -1,6 +1,6 @@
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
-from wekan_handler import create_new_card, backlog_list, todo_list
+from wekan_handler import create_new_card, backlog_list
 import os
 import logging
 from gitlab import get_latest_apk
@@ -52,19 +52,19 @@ async def backlog(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 
-async def todo(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if is_group_chat_and_reply_to_message(update):
-        reply_message_text = update.effective_message.reply_to_message.text
-        card_title = extract_card_title_from_message(update)
-
-        new_card_link = create_new_card(
-            list=todo_list, description=reply_message_text, title=card_title
-        )
-        await context.bot.sendMessage(
-            chat_id=update.effective_chat.id,
-            reply_to_message_id=update.effective_message.id,
-            text=f"Card created: {new_card_link}",
-        )
+# async def todo(update: Update, context: ContextTypes.DEFAULT_TYPE):
+#     if is_group_chat_and_reply_to_message(update):
+#         reply_message_text = update.effective_message.reply_to_message.text
+#         card_title = extract_card_title_from_message(update)
+#
+#         new_card_link = create_new_card(
+#             list=todo_list, description=reply_message_text, title=card_title
+#         )
+#         await context.bot.sendMessage(
+#             chat_id=update.effective_chat.id,
+#             reply_to_message_id=update.effective_message.id,
+#             text=f"Card created: {new_card_link}",
+#         )
 
 
 async def get_latest_build(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -82,7 +82,7 @@ async def get_latest_build(update: Update, context: ContextTypes.DEFAULT_TYPE):
 def main():
     application = Application.builder().token(TELEGRAM_API_KEY).build()
     application.add_handler(CommandHandler("backlog", callback=backlog))
-    application.add_handler(CommandHandler("todo", callback=todo))
+    # application.add_handler(CommandHandler("todo", callback=todo))
     application.add_handler(CommandHandler("getlatestbuild", callback=get_latest_build))
     application.run_polling(allowed_updates=Update.ALL_TYPES)
 

@@ -17,7 +17,7 @@ board: Board = client.list_boards(regex_filter="GRAD")[0]
 swimlane: Swimlane = board.list_swimlanes()[0]
 
 backlog_list: List = board.list_lists(regex_filter="BACKLOG")[0]
-todo_list: List = board.list_lists(regex_filter="TO DO (dev.this.release)")[0]
+# todo_list: List = board.list_lists(regex_filter="TO DO (dev.this.release)")[0]
 
 
 def create_new_card(list: List, description="", title="") -> str:
