@@ -71,6 +71,7 @@ async def get_latest_build(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.sendDocument(
             chat_id=update.effective_chat.id, document=apk_name
         )
+        os.remove(apk_name)
 
 
 def main():
