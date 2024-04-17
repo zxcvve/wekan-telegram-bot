@@ -30,6 +30,10 @@ def is_group_chat_and_reply_to_message(update):
     )
 
 
+def is_group_chat(update):
+    return update.effective_chat.id == TELEGRAM_GROUP_CHAT_ID
+
+
 async def backlog(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if is_group_chat_and_reply_to_message(update):
         reply_message_text = update.effective_message.reply_to_message.text
