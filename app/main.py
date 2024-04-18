@@ -72,12 +72,19 @@ async def get_latest_build(update: Update, context: ContextTypes.DEFAULT_TYPE):
     logger.info("Processing /getlastesbuild command")
     global BUSY
     if is_group_chat(update) and not BUSY:
+        logger.info("Setting BUSY flag")
         BUSY = True
         apk_name = get_latest_apk()
+        logger.info(f"Unpacked APK name {apk_name}")
+        apk_path = f"./{apk_name}"
+        logger.info(f"Unpacked APK path {apk_path}")
+        logger.info("Sending APK...")
         await context.bot.sendDocument(
-            chat_id=update.effective_chat.id, document=apk_name
+            chat_id=update.effective_chat.id, document=apk_path
         )
+        logger.info("Removing sent APK")
         os.remove(apk_name)
+        logger.info("APK upload finished. Removing BUSY flag")
         BUSY = False
 
 
