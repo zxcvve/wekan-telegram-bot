@@ -79,9 +79,10 @@ async def get_latest_build(update: Update, context: ContextTypes.DEFAULT_TYPE):
         apk_path = f"./{apk_name}"
         logger.info(f"Unpacked APK path {apk_path}")
         logger.info("Sending APK...")
-        await context.bot.sendDocument(
-            chat_id=update.effective_chat.id, document=apk_path
-        )
+        with open(apk_path, "rb") as APK:
+            await context.bot.sendDocument(
+                chat_id=update.effective_chat.id, document=APK
+            )
         logger.info("Removing sent APK")
         os.remove(apk_name)
         logger.info("APK upload finished. Removing BUSY flag")
