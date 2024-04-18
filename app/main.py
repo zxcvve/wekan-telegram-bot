@@ -69,24 +69,27 @@ async def backlog(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def get_latest_build(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    logger.info("Processing /getlastesbuild command")
-    global BUSY
-    if is_group_chat(update) and not BUSY:
-        logger.info("Setting BUSY flag")
-        BUSY = True
-        apk_name = get_latest_apk()
-        logger.info(f"Unpacked APK name {apk_name}")
-        apk_path = f"./{apk_name}"
-        logger.info(f"Unpacked APK path {apk_path}")
-        logger.info("Sending APK...")
-        with open(apk_path, "rb") as APK:
-            await context.bot.sendDocument(
-                chat_id=update.effective_chat.id, document=APK
-            )
-        logger.info("Removing sent APK")
-        os.remove(apk_name)
-        logger.info("APK upload finished. Removing BUSY flag")
-        BUSY = False
+    try:
+        logger.info("Processing /getlastesbuild command")
+        global BUSY
+        if is_group_chat(update) and not BUSY:
+            logger.info("Setting BUSY flag")
+            BUSY = True
+            apk_name = get_latest_apk()
+            logger.info(f"Unpacked APK name {apk_name}")
+            apk_path = f"./{apk_name}"
+            logger.info(f"Unpacked APK path {apk_path}")
+            logger.info("Sending APK...")
+            with open(apk_path, "rb") as APK:
+                await context.bot.sendDocument(
+                    chat_id=update.effective_chat.id, document=APK
+                )
+            logger.info("Removing sent APK")
+            os.remove(apk_name)
+            logger.info("APK upload finished. Removing BUSY flag")
+            BUSY = False
+    except Exception as e:
+        logger.info(e)
 
 
 def main():
