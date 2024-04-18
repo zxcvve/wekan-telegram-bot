@@ -38,6 +38,7 @@ def is_group_chat(update):
 
 
 async def backlog(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    logger.info("Processing /backlog command")
     if is_group_chat_and_reply_to_message(update):
         reply_message_text = update.effective_message.reply_to_message.text
         card_title = extract_card_title_from_message(update)
@@ -68,6 +69,7 @@ async def backlog(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def get_latest_build(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    logger.info("Processing /getlastesbuild command")
     global BUSY
     if is_group_chat(update) and not BUSY:
         BUSY = True
