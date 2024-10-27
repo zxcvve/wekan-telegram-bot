@@ -18,13 +18,18 @@ logger = logging.getLogger(__name__)
 
 
 async def task(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_chat.id == TELEGRAM_GROUP_CHAT_ID and update.effective_message.reply_to_message is not None:
-        reply_message_text = update.effective_message.reply_to_message.text
-        new_card_link = create_new_card(description=reply_message_text)
+    if (
+        update.effective_chat.id == TELEGRAM_GROUP_CHAT_ID
+        and update.effective_message.reply_to_message is not None
+    ):
+        task_title = update.effective_message.text[6:]
+        task_description = update.effective_message.reply_to_message.text
+
+        new_card_link = create_new_card(title=task_title, description=task_description)
         await context.bot.sendMessage(
             chat_id=update.effective_chat.id,
             reply_to_message_id=update.effective_message.id,
-            text=f"Card created: {new_card_link}"
+            text=f"Card created: {new_card_link}",
         )
 
 
